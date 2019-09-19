@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Game of Thrones</title>
+  </head>
+  <body>
+    <div id="game-of-thrones-vue">
+      <input v-model="characterNumber" id="js-character-number" />
+      <button
+        v-on:click="getGameOfThronesCharacter"
+        style="background-color: #000000; color: #ffffff"
+      >
+        Get Character Info
+      </button>
+
+      <br />
+      <br />
+
+      <section id="Game-of-throne-data">
+        <span><b>Name: {{name}}</b></span>
+        <br />
+        <span><b>Gender: {{gender}}</b> </span>
+        <br />
+        <span><b>Culture: {{culture}}</b> </span>
+      </section>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: "#game-of-thrones-vue",
+      data: {
+        characterNumber: "358",
+        name: "",
+        gender: "",
+        culture: ""
+      },
+      methods: {
+        async getGameOfThronesCharacter() {
+          const { characterNumber } = this; // object destructuring
+          if (characterNumber == "") return alert("Input box cannot be empty");
+
+          const myJson = await fetch(
+            `https://anapioficeandfire.com/api/characters/${characterNumber}`
+          );
+          const response = await myJson.json();
+          const { name, gender, culture } = response; // object destructuring
+          this.name = name;
+          this.gender = gender;
+          this.culture = culture;
+        }
+      },
+      mounted() {
+        this.getGameOfThronesCharacter();
+      }
+    });
+
+    // const gameOfThronesSection = Vue.component("game-of-thrones", {
+    //   name: "game-of-thrones",
+    //   template: `
+    //   <div>
+    //     <input id="js-character-number" />
+    //     <button style="background-color: #000000; color: #ffffff">
+    //       Get Character Info
+    //     </button>
+    //   </div>
+    //   `
+    // });
+  </script>
+</html>
